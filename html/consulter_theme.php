@@ -1,11 +1,15 @@
 
 <!-- Bootstrap -->
-<link href="css/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="css/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css" 
+rel="stylesheet" media="screen">
 
 
 <?php
 
+session_start();
 $id_theme = $_GET['id_theme'];
+$_SESSION['id_theme'] = $id_theme;
+echo $_SESSION['id_theme']; 
 include 'config.php';
 $query="SELECT * FROM Theme WHERE ID_THEME='$id_theme'";
 if($result=mysqli_query($conn,$query))
@@ -21,7 +25,7 @@ if($result=mysqli_query($conn,$query))
       <p>Descriptif : <?php echo $descriptif; ?></p>
       <?php
    }
-   $query2="SELECT enonce, proposition1, proposition2, proposition3, proposition4, reponse FROM Question INNER JOIN themes_questions ON Question.ID_QUESTION = themes_questions.ID_QUESTION WHERE ID_THEME=1";
+   $query2="SELECT enonce, proposition1, proposition2, proposition3, proposition4, reponse FROM Question INNER JOIN themes_questions ON Question.ID_QUESTION = themes_questions.ID_QUESTION WHERE ID_THEME='$id_theme'";
    if($result2=mysqli_query($conn,$query2))
    {
        ?>
@@ -32,7 +36,7 @@ if($result=mysqli_query($conn,$query))
               <th>Proposition 2</th>
               <th>Proposition 3</th>
               <th>Proposition 4</th>
-              <th>Reponse</th>
+              <th>Réponse</th>
            </tr>
         <?php
         while ($ligne = mysqli_fetch_assoc($result2))
@@ -74,4 +78,7 @@ else
 
 ?>
 
+<a class="btn btn-primary" href="ajout_question.php">Ajouter question</a></br></br>
+
 <a href="themes.php">Retour</a>
+ 

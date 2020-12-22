@@ -604,6 +604,8 @@ progress {
   padding-left: var(--bs-gutter-x, 0.75rem);
   margin-right: auto;
   margin-left: auto;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (min-width: 576px) {
@@ -2119,6 +2121,7 @@ progress {
 }
 .form-label {
   margin-bottom: 0.5rem;
+  line-height: 1.5;
 }
 
 .col-form-label {
