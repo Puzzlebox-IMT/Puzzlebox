@@ -30,7 +30,7 @@ if($_POST)
   $query="INSERT INTO Question (enonce, proposition1, proposition2, proposition3, proposition4, reponse) VALUES ('$sEnonce', '$sProposition1', '$sProposition2', '$sProposition3', '$sProposition4', '$sReponse')";
   if($result=mysqli_query($conn,$query))
   {
-    $query2="SELECT ID_QUESTION FROM Question WHERE enonce='$enonce' AND proposition1='$proposition1' AND proposition2='$proposition2' AND proposition3='$proposition3' AND proposition4='$proposition4' AND reponse='$reponse'";
+    $query2="SELECT ID_QUESTION FROM Question WHERE enonce='$sEnonce' AND proposition1='$sProposition1' AND proposition2='$sProposition2' AND proposition3='$sProposition3' AND proposition4='$sProposition4' AND reponse='$sReponse'";
     if ($result2 = mysqli_query($conn,$query2))
     {
        while ($ligne = mysqli_fetch_assoc($result2))

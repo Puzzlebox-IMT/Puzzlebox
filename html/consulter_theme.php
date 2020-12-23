@@ -1,15 +1,16 @@
-
-<!-- Bootstrap -->
-<link href="css/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css" 
-rel="stylesheet" media="screen">
+<head>
+  <!-- Bootstrap -->
+  <link href="css/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css" 
+  rel="stylesheet" media="screen">
+  <link href="css/fontawesome-free-5.15.1-web/css/all.css" rel="stylesheet">
+</head>
 
 
 <?php
 
 session_start();
 $id_theme = $_GET['id_theme'];
-$_SESSION['id_theme'] = $id_theme;
-echo $_SESSION['id_theme']; 
+$_SESSION['id_theme'] = $id_theme; 
 include 'config.php';
 $query="SELECT * FROM Theme WHERE ID_THEME='$id_theme'";
 if($result=mysqli_query($conn,$query))
@@ -25,7 +26,7 @@ if($result=mysqli_query($conn,$query))
       <p>Descriptif : <?php echo $descriptif; ?></p>
       <?php
    }
-   $query2="SELECT enonce, proposition1, proposition2, proposition3, proposition4, reponse FROM Question INNER JOIN themes_questions ON Question.ID_QUESTION = themes_questions.ID_QUESTION WHERE ID_THEME='$id_theme'";
+   $query2="SELECT * FROM Question INNER JOIN themes_questions ON Question.ID_QUESTION = themes_questions.ID_QUESTION WHERE ID_THEME='$id_theme'";
    if($result2=mysqli_query($conn,$query2))
    {
        ?>
@@ -41,6 +42,7 @@ if($result=mysqli_query($conn,$query))
         <?php
         while ($ligne = mysqli_fetch_assoc($result2))
         {
+           $id_question = $ligne['ID_QUESTION'];
            $enonce = $ligne['enonce'];
            $proposition1 = $ligne['proposition1'];
            $proposition2 = $ligne['proposition2'];
@@ -49,7 +51,7 @@ if($result=mysqli_query($conn,$query))
            $reponse = $ligne['reponse'];
            ?>
            <tr>
-              <td><?php echo $enonce; ?> </td>
+              <td><a href="EVS_supprimer_question.php?id_question=<?php echo $id_question?>"><i class="fas fa-trash"></i></a><?php echo $enonce; ?> </td>
               <td><?php echo $proposition1; ?> </td>
               <td><?php echo $proposition2; ?> </td>
               <td><?php echo $proposition3; ?> </td>
@@ -77,7 +79,7 @@ else
 }
 
 ?>
-
+</br>
 <a class="btn btn-primary" href="ajout_question.php">Ajouter question</a></br></br>
 
 <a href="themes.php">Retour</a>
