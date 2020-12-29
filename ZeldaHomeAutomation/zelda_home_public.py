@@ -2,7 +2,7 @@
 #https://benchodroff.com/2017/02/18/using-a-raspberry-pi-with-a-microphone-to-hear-an-audio-alarm-using-fft-in-python/
 #!/usr/bin/env python
 import pyaudio
-from numpy import zeros,linspace,short,fromstring,hstack,transpose,log,frombuffer
+from numpy import *
 from scipy import fft
 from time import sleep
 from collections import deque
@@ -129,12 +129,17 @@ _stream = pa.open(format=pyaudio.paInt16,
 #print("Alarm detector working. Press CTRL-C to quit.")
 
 while True:
-    while _stream.get_read_available()< NUM_SAMPLES: sleep(0.01)
+    while _stream.get_read_available()< NUM_SAMPLES: sleep(0.01) #Retourne le nombre d'image qui peuvent etre lue sans attendre
     audio_data  = frombuffer(_stream.read(
         _stream.get_read_available()), dtype=short)[-NUM_SAMPLES:]
     # Each data point is a signed 16 bit number, so we can normalize by dividing 32*1024
     normalized_data = audio_data / 32768.0
-    intensity = abs(fft.fft(normalized_data))[:NUM_SAMPLES/2]
+    #print(type(NUM_SAMPLES))
+    #print("La taille du tableau audio est :", +audio_data.size)
+    #print("Le tableau de audio est :\n", +audio_data)
+    #print("Le tableau de normalized est :\n", +normalized_data)
+    #print("La taille du tableau normalise est :", +normalized_data)
+    intensity = abs(fft.fft(normalized_data))[:int(NUM_SAMPLES/2)]
     frequencies = linspace(0.0, float(SAMPLING_RATE)/2, num=NUM_SAMPLES/2)
     if frequencyoutput:
         which = intensity[1:].argmax()+1
@@ -150,10 +155,10 @@ while True:
        # print "\t\t\t\tfreq=",freqNow,"\t",freqPast
     if minD4 <= freqPast <= maxD5 and abs(freqNow-freqPast) <= 25:
         if minA<=freqPast<=maxA and minA<=freqNow<=maxA and notes[-1]!='A':
-            notes.append('A')
-            GPIO.output(26, GPIO.LOW)
+            notes.append('A') #La note A (La) est ajoutée au tableau de note
+            GPIO.output(26, GPIO.LOW) #LED éteinte
             GPIO.output(19, GPIO.LOW)
-            GPIO.output(13, GPIO.HIGH)
+            GPIO.output(13, GPIO.HIGH) #LED allumée
             GPIO.output(6, GPIO.LOW)
             GPIO.output(5, GPIO.LOW)
             print ("You played A!")
@@ -206,14 +211,14 @@ while True:
             GPIO.output(5, GPIO.LOW)
             print ("You played G!")
         else:
-            print ("What the heck is that?")#prints when sound is in range but not identifiable as note
+            print ("What the heck is that?") #prints when sound is in range but not identifiable as note
 											#or when a note has already been registered and is "heard" again
 
     if notes==sun:
         print ("\t\t\t\tSun song!")
         client.publish("songID", "1") #1=Sun
         confirm.play()
-        notes.append('G')#append with 'G' to 'reset' notes, this keeps the song from triggering constantly
+        notes.append('G') #append with 'G' to 'reset' notes, this keeps the song from triggering constantly
     if notes==forest:
         print ("Minuet of Forest!")
         client.publish("songID", "4") #4=Forest
@@ -223,3 +228,4 @@ while True:
         print ("Test Sequence Activated!")
         confirm.play()
         notes.append('G')
+
