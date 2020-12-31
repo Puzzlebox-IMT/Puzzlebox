@@ -46,7 +46,8 @@ GPIO.output(19, GPIO.LOW)
 GPIO.output(26, GPIO.LOW)
 #audio stuff maybe
 pygame.mixer.init(32000) #turn all of pygame on.
-confirm = Sound("OOT_Song_Correct.wav") #change accordingly for your song confirmation sound file name/location
+confirm = Sound("Music/OOT_Song_Correct.wav") #change accordingly for your song confirmation sound file name/location
+
 #mqtt stuff
 client = mqtt.Client()
 client.connect("localhost",1883,300)
@@ -60,13 +61,13 @@ SENSITIVITY= 1.0
 BANDWIDTH = 25
 
 # Alarm frequencies (Hz) to detect (Use audacity to record a wave and then do Analyze->Plot Spectrum)
-D4 = 630
-E = 685
-F = 755
-G = 806
-A = 890
-B = 1000
-D5 = 1175
+D4 = 590
+E = 650
+F = 700
+G = 780
+A = 882
+B = 992
+D5 = 1179
 #frequency ranges for each note
 '''rangeD4 = range(D4-BANDWIDTH,D4+BANDWIDTH)
 rangeE = range(E-BANDWIDTH,E+BANDWIDTH)
