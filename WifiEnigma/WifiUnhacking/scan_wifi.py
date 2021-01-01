@@ -2,7 +2,6 @@ from piwifi import Scanner, WpaManager
 import re
 
 
-
 s = Scanner(interface='wlan0', sudo=True)
 
 #Recupère la liste des réseaux et leurs caractéristiques
