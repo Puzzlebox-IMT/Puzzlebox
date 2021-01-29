@@ -1,5 +1,6 @@
 import mysql.connector
 import random
+from voice import synthetize_voice, delete_wav
 
 def AllQuestionAI(id_theme):
 
@@ -66,31 +67,47 @@ def questionAI(id_theme):
        #L'index de la liste commence à zéro, il faut donc décaler d'un le numéro 
        num_question = num_question - 1
        question = rows[num_question]
+       result = [] #Tab which stores the query results
+
 
        #RECUPERATION DES TUPLES
        enonce = question[1]
-       proposition1 = question[2]
-       proposition2 = question[3]
-       proposition3 = question[4]
-       proposition4 = question[5]
-       reponse = question[5]
+       result.append(question[2])
+       result.append(question[3])
+       result.append(question[4])
+       result.append(question[5])
+       result.append(question[5]) #This last one is the answer
 
        print("*******************************************************************************")
        print("                                     QUESTION ",num_question+1,"                            ")
        print("*******************************************************************************")
        print("ENONCE : ", enonce)
-       print("PROPOSITION 1 : ", proposition1)
-       print("PROPOSITION 2 : ", proposition2)
-       print("PROPOSITION 3 : ", proposition3)
-       print("PROPOSITION 4 : ", proposition4)
-       print("REPONSE : ", reponse)
-
+       print("PROPOSITION 1 : ", result[0])
+       print("PROPOSITION 2 : ", result[1])
+       print("PROPOSITION 3 : ", result[2])
+       print("PROPOSITION 4 : ", result[3])
+       print("REPONSE : ", result[4])
+ 
+       #complete_question =  ''.join(complete_question) #Convert tuple into string
+       return result
 
     else:
 
        print("Ce thème ne contient pas de questions")
 
 
+def tell_question(question):
+
+    for i in range(0,4) :
+
+        num_prop = "Proposition {} ".format(i+1)
+        num_prop =  ''.join(num_prop)
+        line =  ''.join(question[i])
+        line = num_prop + line
+        synthetize_voice(line)
+    delete_wav()
 
 
-questionAI(1)
+question = questionAI(1)
+tell_question(question)
+print(type(question))

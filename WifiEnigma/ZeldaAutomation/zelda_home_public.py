@@ -46,7 +46,7 @@ GPIO.output(19, GPIO.LOW)
 GPIO.output(26, GPIO.LOW)
 #audio stuff maybe
 pygame.mixer.init(32000) #turn all of pygame on.
-confirm = Sound("Music/OOT_Song_Correct.wav") #change accordingly for your song confirmation sound file name/location
+confirm = Sound("/home/pi/git_workspace/Puzzlebox/WifiEnigma/ZeldaAutomation/Music/OOT_Song_Correct.wav") #change accordingly for your song confirmation sound file name/location
 
 #mqtt stuff
 client = mqtt.Client()
