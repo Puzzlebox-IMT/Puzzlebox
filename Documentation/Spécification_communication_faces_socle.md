@@ -12,13 +12,13 @@ Pour les besoins de notre projet nous aurons une **architecture en étoile** : u
 
 ```mermaid
 flowchart TB
-A[(Raspberry Pi)]
-B(Face 1, ESP8266)<-.->A
-C(Face 2, ESP8266)<-.->A
-D(Face 3, ESP8266)<-.->A
-E(Face 4, ESP8266)<-.->A
-F(Face 5, ESP8266)<-.->A
-G(Face 6, ESP8266)<-.->A
+    A[(Raspberry Pi)]
+    B(Face 1, ESP8266)<-.->A
+    C(Face 2, ESP8266)<-.->A
+    D(Face 3, ESP8266)<-.->A
+    E(Face 4, ESP8266)<-.->A
+    F(Face 5, ESP8266)<-.->A
+    G(Face 6, ESP8266)<-.->A
 ```
 
 ### MQTT 
