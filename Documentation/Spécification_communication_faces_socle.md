@@ -12,7 +12,7 @@ Pour les besoins de notre projet nous aurons une **architecture en étoile** : u
 
 ```mermaid
 graph TB
-A[(Raspberry Pi)]
+A(Raspberry Pi)
 B(Face 1, ESP8266)<-.->A
 C(Face 2, ESP8266)<-.->A
 D(Face 3, ESP8266)<-.->A
