@@ -11,14 +11,14 @@ Nos faces sont pensées pour être détachables. Afin que ces dernières puissen
 Pour les besoins de notre projet nous aurons une **architecture en étoile** : un **Raspberry Pi** au centre, dans le socle, et des **ESP8266**, un par face. Le Raspberry diffusera un réseau Wi-Fi auquel viendront se connecter les ESP8266. Si les besoins de la face requièrent des fonctionnalités qui dépassent les capacités d'un ESP8266, on pourra utiliser d'autre cartes : **ESP32** (un peu plus puissante, prise en charge du Bluetooth), **Raspberry Pi zero**, ...
 
 ```mermaid
-flowchart TB
-    A[(Raspberry Pi)]
-    B(Face 1, ESP8266)<-.->A
-    C(Face 2, ESP8266)<-.->A
-    D(Face 3, ESP8266)<-.->A
-    E(Face 4, ESP8266)<-.->A
-    F(Face 5, ESP8266)<-.->A
-    G(Face 6, ESP8266)<-.->A
+graph TB
+    A(Raspberry Pi)
+    B(Face 1, ESP8266)-.->A
+    C(Face 2, ESP8266)-.->A
+    D(Face 3, ESP8266)-.->A
+    E(Face 4, ESP8266)-.->A
+    F(Face 5, ESP8266)-.->A
+    G(Face 6, ESP8266)-.->A
 ```
 
 ### MQTT 
