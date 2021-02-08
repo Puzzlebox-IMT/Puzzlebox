@@ -149,6 +149,7 @@ def Connect(ssid, password=None):
 
 
 
+if (__name__ == '__main__'):
 
-ssid_list = scan_wifi2()
-print(ssid_list)
+   ssid_list = scan_wifi2()
+   print(ssid_list)

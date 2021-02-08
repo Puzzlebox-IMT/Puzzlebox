@@ -10,3 +10,9 @@ def synthetize_voice(message):
 def delete_wav():
 
     os.system('sudo rm -rf voice.wav')
+
+
+if __name__ == '__main__':
+
+   message = "Test"
+   synthetize_voice(message)

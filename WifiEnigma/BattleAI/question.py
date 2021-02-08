@@ -71,7 +71,7 @@ def questionAI(id_theme):
 
 
        #RECUPERATION DES TUPLES
-       enonce = question[1]
+       result.append(question[1])
        result.append(question[2])
        result.append(question[3])
        result.append(question[4])
@@ -81,12 +81,12 @@ def questionAI(id_theme):
        print("*******************************************************************************")
        print("                                     QUESTION ",num_question+1,"                            ")
        print("*******************************************************************************")
-       print("ENONCE : ", enonce)
-       print("PROPOSITION 1 : ", result[0])
-       print("PROPOSITION 2 : ", result[1])
-       print("PROPOSITION 3 : ", result[2])
-       print("PROPOSITION 4 : ", result[3])
-       print("REPONSE : ", result[4])
+       print("ENONCE : ", result[0])
+       print("PROPOSITION 1 : ", result[1])
+       print("PROPOSITION 2 : ", result[2])
+       print("PROPOSITION 3 : ", result[3])
+       print("PROPOSITION 4 : ", result[4])
+       print("REPONSE : ", result[5])
  
        #complete_question =  ''.join(complete_question) #Convert tuple into string
        return result
@@ -98,9 +98,10 @@ def questionAI(id_theme):
 
 def tell_question(question):
 
-    for i in range(0,4) :
+    synthetize_voice(question[0])
+    for i in range(1,5) :
 
-        num_prop = "Proposition {} ".format(i+1)
+        num_prop = "Proposition {} ".format(i)
         num_prop =  ''.join(num_prop)
         line =  ''.join(question[i])
         line = num_prop + line
@@ -108,6 +109,7 @@ def tell_question(question):
     delete_wav()
 
 
-question = questionAI(1)
-tell_question(question)
-print(type(question))
+if (__name__ == '__main__'):
+
+   result = questionAI(1)
+   tell_question(result)
