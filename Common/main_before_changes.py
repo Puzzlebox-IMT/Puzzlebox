@@ -1,9 +1,20 @@
-from main_Wifi_Enigma import thread_Wifi_Enigma
-import threading
-import time
 import paho.mqtt.client as mqtt
 import sys
+import time
 
+
+sys.path.append('../WifiEnigma/WifiUnhacking')
+sys.path.append('../WifiEnigma/ZeldaAutomation')
+sys.path.append('../WifiEnigma/BattleAI')
+
+
+#IMPORTS OF THE WIFI UNHACKING ENIGMA
+import wifi_Puzzlebox
+import wifiUnhackingSolved
+
+#IMPORTS OF THE WIFI DOMOTIC ENIGMA
+import zelda_home_public
+import domoticEnigmaSolved
 
 HOST="localhost"
 PORT=1883
@@ -15,7 +26,6 @@ payloadsLifi = [""] #Initialize a list to collect the payloads from the LiFi top
 wifiUnhackingSolved = False
 battleAISolved = False
 domoticSolved = False
-
 
 def on_connect(client, userdata, flags, rc): 
 
@@ -50,24 +60,26 @@ client.subscribe("WifiEnigma")
 
 client.loop_start()
 
-
-killThreadWifiEnigma = threading.Event()
-threadWifiEnigma= thread_Wifi_Enigma(killThreadWifiEnigma)
-threadWifiEnigma.start()
-
 try:
-    while True:
-    #while (threadWifiEnigma.result() != True):
-       if(payloadsWifiEnigma):
+  while True:
 
-          thread_Wifi_Enigma.action(payloadsWifiEnigma[-1])
-          payloadsWifiEnigma = []
+      time.sleep(1)
+      if(wifiUnhackingSolved == False):
 
-       print("Jeu en cours")
+        print(payloadsWifiEnigma)
+        print(payloadsWifiEnigma[-1])
+        if(payloadsWifiEnigma[-1] == "CallNavi"):
+
+           print("Caca")
+
+      elif(battleAISolved == False):
+
+           print("Pipi") 
+
 
 except KeyboardInterrupt:
 
-    client.loop_stop()
-    pass
+     client.loop_stop()
+     pass
 
 
