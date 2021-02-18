@@ -1,28 +1,33 @@
-import multiprocessing as mp
 import time
 import paho.mqtt.client as mqtt
 import sys
-from initialization import *
 
-sys.path.append('../WifiEnigma')
-sys.path.append('../WifiEnigma/WifiUnhacking')
-sys.path.append('../WifiEnigma/ZeldaAutomation')
-sys.path.append('../WifiEnigma/BattleAI')
+sys.path.append('WifiUnhacking')
+sys.path.append('ZeldaAutomation')
+sys.path.append('BattleAI')
 
-#Import Enigma's main
-from mainWifiEnigma import *
+#IMPORTS OF THE WIFI UNHACKING ENIGMA
+from wifi_Puzzlebox import *
+#from wifiUnhackingSolved import *
+
+#IMPORTS OF THE WIFI BATTLE AI
+from zelda_home_public import *
+from voice import *
+
+
+#IMPORTS OF THE WIFI DOMOTIC ENIGMA
+import zelda_home_public
+import domoticEnigmaSolved
+
 
 HOST="localhost"
 PORT=1883
-
-payloadsWifiEnigma = [""] #Initialize a list to collect the payloads from the WifiEnigma topic 
-payloadsLifi = [""] #Initialize a list to collect the payloads from the LiFi topic
 
 #Flags which indicates if the enigmas are solved
 wifiUnhackingSolved = False
 battleAISolved = False
 domoticSolved = False
-
+wifiEnigmaSolved = False
 
 def on_connect(client, userdata, flags, rc): 
 
@@ -38,20 +43,16 @@ def on_message(client, userdata, msg):
 
        payloadsWifiEnigma.append(currentPayload) #Insert the current payload on a list
 
-    elif(currentTopic == "LiFi"):
-
-       payloadsLifi.append(currentPayload)
     else:
 
        print("Unknown topic")
 
     print("Message received on topic {0}: {1}".format(msg.topic, msg.payload))
 
-if(__name__ == '__main__'):
 
-    #Waiting for the player launching the game
-    initializeGame()
 
+def wifiEnigmaRun():
+ 
     client = mqtt.Client() 
     client.on_connect = on_connect
     client.on_message = on_message
@@ -60,17 +61,15 @@ if(__name__ == '__main__'):
     client.subscribe("WifiEnigma")
 
     client.loop_start()
-    ctx = mp.get_context('spawn')
 
     try:
 
-        #Execute wifiUnhackingEnigma
-        wifiProcess = ctx.Process(target=wifiEnigmaRun)
-        wifiProcess.start()
-        print("Jeu en cours")
+        #While the WifiEnigma is not solved
+        while (wifiEnigmaSolved != True):
 
+           while (wifiUnhackingSolved != True):
 
-        wifiProcess.join()
+              print("caca") 
 
 
     except KeyboardInterrupt:
@@ -79,3 +78,6 @@ if(__name__ == '__main__'):
         pass
 
 
+if(__name__ == '__main__'):
+
+    wifiEnigmaRun()

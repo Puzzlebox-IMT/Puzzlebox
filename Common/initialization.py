@@ -1,26 +1,22 @@
 import paho.mqtt.client as mqtt
 
-entree=""
-#Configuration du RPI en tant que client
-client = mqtt.Client()
+def initializeGame():
 
-#Connexion au broker MQTT
-client.connect("localhost",1883,300)
+    entree="blocked"
+    #Configuration du RPI en tant que client
+    client = mqtt.Client()
 
-while (entree != "Q"):
+    #Connexion au broker MQTT
+    client.connect("localhost",1883,300)
 
-  entree = input("Demarrer une partie en appuyant sur Q \n")
+    while (entree != ''):
 
+          print("Bienvenue dans le merveilleux univers de Puzzlebox")
+          entree = input("Pour démarrer une partie appuyez sur ENTREE au clavier ou pressez le bouton central de la Puzzlebox\n")
 
-#Payload dédiée à l'initialisation
-client.publish("Initialisation", "I")
+    #Payload dédiée à l'initialisation
+    client.publish("Initialisation", "I")
 
-"""while (entree != "A"):
+if(__name__ == '__main__'):
 
-  entree = input("Resoudre enigme Unhacking en appuyant sur A \n")
-
-while (entree != "B"):
-
-  entree = input("Resoudre enigme BATTLE AI en appuyant sur B \n")
-
-"""
+    initializeGame()
