@@ -5,12 +5,15 @@ import sys
 from initialization import *
 
 sys.path.append('../WifiEnigma')
+sys.path.append('../LifiEnigma')
+
 sys.path.append('../WifiEnigma/WifiUnhacking')
 sys.path.append('../WifiEnigma/ZeldaAutomation')
 sys.path.append('../WifiEnigma/BattleAI')
 
 #Import Enigma's main
 from mainWifiEnigma import *
+from mainLifiEnigma import *
 
 HOST="localhost"
 PORT=1883
@@ -34,18 +37,15 @@ def on_message(client, userdata, msg):
     currentPayload = msg.payload
     currentPayload = currentPayload.decode("utf-8")  #Convert the current payload from bytes to string
     currentTopic = msg.topic
-    if(currentTopic == "WifiEnigma"):
+    if(currentTopic == "main"):
 
        payloadsWifiEnigma.append(currentPayload) #Insert the current payload on a list
 
-    elif(currentTopic == "LiFi"):
-
-       payloadsLifi.append(currentPayload)
     else:
 
        print("Unknown topic")
 
-    print("Message received on topic {0}: {1}".format(msg.topic, msg.payload))
+    #print("Message received on topic {0}: {1}".format(msg.topic, msg.payload))
 
 if(__name__ == '__main__'):
 
@@ -66,12 +66,14 @@ if(__name__ == '__main__'):
 
         #Execute wifiUnhackingEnigma
         wifiProcess = ctx.Process(target=wifiEnigmaRun)
+        lifiProcess = ctx.Process(target=lifiEnigmaRun)
+
         wifiProcess.start()
+        lifiProcess.start()
+
         print("Jeu en cours")
-
-
         wifiProcess.join()
-
+        lifiProcess.join()
 
     except KeyboardInterrupt:
 

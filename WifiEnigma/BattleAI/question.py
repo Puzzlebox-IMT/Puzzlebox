@@ -108,6 +108,13 @@ def tell_question(question):
         synthetize_voice(line)
     delete_wav()
 
+def quiz():
+
+    counter = 1
+    while(counter <= 5):
+
+       questionAI(1)
+
 
 if (__name__ == '__main__'):
 
