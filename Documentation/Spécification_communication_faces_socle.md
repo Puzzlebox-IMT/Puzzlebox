@@ -88,7 +88,7 @@ Voici les différents topics et messages associés qui seront utilisés.
             <td>reset</td>
             <td>"1" (pas utile mais payload ne peut être null)</td>
             <td>RPi --> *Faces en jeu</td>
-            <td>Le RPi demande aux faces de se remettre à zéro (retour à l'état non résolut, par exemple après une partie)</td>
+            <td>Le RPi demande aux faces de se remettre à zéro (retour à l'état non résolu, par exemple après une partie)</td>
         </tr>
     </tbody>
 </table>
