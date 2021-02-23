@@ -71,14 +71,14 @@ Voici les différents topics et messages associés qui seront utilisés.
         </tr>
         <!--L4-->
         <tr>
-            <td>ask_resolution_state</td>
+            <td>ask_state</td>
             <td>"1" (pas utile mais payload ne peut être null)</td>
             <td>RPi --> *Faces en jeu</td>
             <td>Le RPi souhaite savoir si les faces en jeu sont résolues ou non</td>
         </tr>
         <!--L5-->
         <tr>	
-            <td>resolution_state</td>
+            <td>state</td>
             <td>{<b>face_id :</b> "facenumber"; <b>resolved :</b> True|False}</td>
             <td>*Faces en jeu --> RPi</td>
             <td>Chaque face envoie son état de résolution (True si résolue, False sinon) au RPi</td>
@@ -92,6 +92,7 @@ Voici les différents topics et messages associés qui seront utilisés.
         </tr>
     </tbody>
 </table>
+
 
 
 
