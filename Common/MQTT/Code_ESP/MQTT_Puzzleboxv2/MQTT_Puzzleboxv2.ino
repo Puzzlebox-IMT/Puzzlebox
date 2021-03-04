@@ -99,7 +99,7 @@ void game(){
   //Ne pas effacer cette partie
   String payload = "{\"face_id\":";
     payload += face_id;
-    payload += ",\"game_state\":";
+    payload += ",\"state\":";
     payload += enigma_solved;
     payload += "}";
   
