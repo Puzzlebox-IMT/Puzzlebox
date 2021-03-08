@@ -64,4 +64,4 @@ Exemple : Pour le mot héxadécimal 2529 la traduction en binaire est 0010 0101 
 
 Exemple d'utilisation :
 
-![XOR](C:\Users\vince\Pictures\XOR.PNG)
+<center>![](./XOR.png)</center>
