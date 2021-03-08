@@ -64,4 +64,4 @@ Exemple : Pour le mot héxadécimal 2529 la traduction en binaire est 0010 0101 
 
 Exemple d'utilisation :
 
-</center>![image-20210308143908195](C:\Users\vince\AppData\Roaming\Typora\typora-user-images\image-20210308143908195.png)</center>
+![XOR](C:\Users\vince\Pictures\XOR.PNG)
