@@ -49,15 +49,15 @@ Voici les différents topics et messages associés qui seront utilisés.
         <!--L1-->
         <tr>
             <td rowspan=2>connection</td>
-            <td>ask_connection_state</td>
-            <td>"1" (pas utile mais payload ne peut être null)</td>
+            <td>ask_state</td>
+            <td>"1" (pas utile mais le payload ne peut être null)</td>
             <td>RPi --> *Faces</td>
-            <td>Le RPi souhaite connaître les faces connectées sur le socle. À la suite de cet envoi, les faces doivent envoyer un message "connection_state"</td>
+            <td>Le RPi souhaite connaître les faces connectées sur le socle. À la suite de cet envoi, les faces doivent envoyer un message "state"</td>
         </tr>
         <!--L2-->
         <tr>
-            <td>connection_state</td>
-            <td>{<b>face_id :</b> "facenumber"; <b>connected :</b> True|False}</td>
+            <td>state</td>
+            <td>{<b>face_id :</b> "facenumber"; <b>state :</b> True|False}</td>
             <td>*faces-->RPi</td>
             <td>Les faces en marche envoient leur état : True si elles sont sur le socle, False sinon</td>
         </tr>
@@ -71,15 +71,15 @@ Voici les différents topics et messages associés qui seront utilisés.
         </tr>
         <!--L4-->
         <tr>
-            <td>ask_resolution_state</td>
+            <td>ask_state</td>
             <td>"1" (pas utile mais payload ne peut être null)</td>
             <td>RPi --> *Faces en jeu</td>
             <td>Le RPi souhaite savoir si les faces en jeu sont résolues ou non</td>
         </tr>
         <!--L5-->
         <tr>	
-            <td>resolution_state</td>
-            <td>{<b>face_id :</b> "facenumber"; <b>resolved :</b> True|False}</td>
+            <td>state</td>
+            <td>{<b>face_id :</b> "facenumber"; <b>state :</b> True|False}</td>
             <td>*Faces en jeu --> RPi</td>
             <td>Chaque face envoie son état de résolution (True si résolue, False sinon) au RPi</td>
         </tr>
@@ -88,10 +88,12 @@ Voici les différents topics et messages associés qui seront utilisés.
             <td>reset</td>
             <td>"1" (pas utile mais payload ne peut être null)</td>
             <td>RPi --> *Faces en jeu</td>
-            <td>Le RPi demande aux faces de se remettre à zéro (retour à l'état non résolut, par exemple après une partie)</td>
+            <td>Le RPi demande aux faces de se remettre à zéro (retour à l'état non résolu, par exemple après une partie)</td>
         </tr>
     </tbody>
 </table>
+
+
 
 
 
@@ -111,3 +113,39 @@ TODO
 TODO, 
 
 énigme wifi : (scan wifi ?), quizz, reconnaissances notes valide ou pas,..
+
+
+
+<table>
+    <thead>
+        <tr>
+            <th>TOPIC</th>
+            <th>MESSAGE</th>
+            <th>PAYLOAD</th>
+            <th>DIRECTION</th>
+            <th>DESCRIPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!--L1-->
+        <tr>
+            <td rowspan=2>WifiEnigma</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <!--L2-->
+        <tr>
+            <td></td>
+            <td></td>
+            <td</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+

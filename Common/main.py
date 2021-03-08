@@ -1,9 +1,19 @@
-from main_Wifi_Enigma import thread_Wifi_Enigma
-import threading
+import multiprocessing as mp
 import time
 import paho.mqtt.client as mqtt
 import sys
+from initialization import *
 
+sys.path.append('../WifiEnigma')
+sys.path.append('../LifiEnigma')
+
+sys.path.append('../WifiEnigma/WifiUnhacking')
+sys.path.append('../WifiEnigma/ZeldaAutomation')
+sys.path.append('../WifiEnigma/BattleAI')
+
+#Import Enigma's main
+from mainWifiEnigma import *
+from mainLifiEnigma import *
 
 HOST="localhost"
 PORT=1883
@@ -27,47 +37,47 @@ def on_message(client, userdata, msg):
     currentPayload = msg.payload
     currentPayload = currentPayload.decode("utf-8")  #Convert the current payload from bytes to string
     currentTopic = msg.topic
-    if(currentTopic == "WifiEnigma"):
+    if(currentTopic == "main"):
 
        payloadsWifiEnigma.append(currentPayload) #Insert the current payload on a list
 
-    elif(currentTopic == "LiFi"):
-
-       payloadsLifi.append(currentPayload)
     else:
 
        print("Unknown topic")
 
-    print("Message received on topic {0}: {1}".format(msg.topic, msg.payload))
+    #print("Message received on topic {0}: {1}".format(msg.topic, msg.payload))
 
+if(__name__ == '__main__'):
 
-client = mqtt.Client() 
-client.on_connect = on_connect
-client.on_message = on_message
+    #Waiting for the player launching the game
+    initializeGame()
 
-client.connect(HOST,PORT,300)
-client.subscribe("WifiEnigma")
+    client = mqtt.Client() 
+    client.on_connect = on_connect
+    client.on_message = on_message
 
-client.loop_start()
+    client.connect(HOST,PORT,300)
+    client.subscribe("WifiEnigma")
 
+    client.loop_start()
+    ctx = mp.get_context('spawn')
 
-killThreadWifiEnigma = threading.Event()
-threadWifiEnigma= thread_Wifi_Enigma(killThreadWifiEnigma)
-threadWifiEnigma.start()
+    try:
 
-try:
-    while True:
-    #while (threadWifiEnigma.result() != True):
-       if(payloadsWifiEnigma):
+        #Execute wifiUnhackingEnigma
+        wifiProcess = ctx.Process(target=wifiEnigmaRun)
+        lifiProcess = ctx.Process(target=lifiEnigmaRun)
 
-          thread_Wifi_Enigma.action(payloadsWifiEnigma[-1])
-          payloadsWifiEnigma = []
+        wifiProcess.start()
+        lifiProcess.start()
 
-       print("Jeu en cours")
+        print("Jeu en cours")
+        wifiProcess.join()
+        lifiProcess.join()
 
-except KeyboardInterrupt:
+    except KeyboardInterrupt:
 
-    client.loop_stop()
-    pass
+        client.loop_stop()
+        pass
 
 
