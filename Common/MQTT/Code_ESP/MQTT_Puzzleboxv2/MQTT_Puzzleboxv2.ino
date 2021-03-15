@@ -1,5 +1,5 @@
 
-#include <WiFi.h> //ou #include <ESP8266WiFi.h> si ESP8266
+#include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
 //Paramètres Wifi
@@ -10,7 +10,7 @@ const char* mqtt_server = "192.168.4.1";
 //Paramètres MQTT
 WiFiClient espClient;
 PubSubClient client(espClient);
-long lastMsg = 0;
+unsigned long lastMsg = 0;
 char msg[50];
 int value = 0;
 
@@ -21,6 +21,7 @@ bool enigma_solved = false;
 
 void setup() {
   Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
@@ -28,6 +29,7 @@ void setup() {
 
 void setup_wifi() {
   delay(5);  
+  
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {

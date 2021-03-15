@@ -46,7 +46,7 @@ char secretKeyArray[17];
 //Variables for the whole game functionning
 char* face_id = "1-WiFi";
 int jeu_initialise = 1; //A MODIFIER EN '0' APRES LES TESTS
-bool attached_to_base = false;
+bool attached_to_base = true;
 bool enigma_solved = false;
 
 
@@ -251,37 +251,34 @@ void callback(char* topic, byte* payload, unsigned int length) {
     payload += attached_to_base;
     payload += "}";
     
-    if (client.publish("connection/state", (char*) payload.c_str())) 
-    {
+        
+    if (client.publish("connection/state", (char*) payload.c_str())) {
       Serial.println("Publish connection/state ok");
       Serial.println("");
-      if(attached_to_base == true)
-      {
-         client.subscribe("game/#");
-         //rajouter la souscription aux topics propres au jeu
-         //gestion du jeu
-         if(strcmp(topic,"game/start")==0 )
-         {
-           game();
-           //? envoyer ack ?
-         }
-
-         else if (strcmp(topic,"game/reset")==0)
-         {
-           reset();
-           //? envoyer ack ?
-         }
-         
-      }
-
-    
     }
-    else 
-    {
+    else {
       Serial.println("Publish connection/state failed");
     }
 
+    if(attached_to_base == true){
+      client.subscribe("game/#");
+      //rajouter la souscription aux topics propres au jeu
+    }
   }
+
+  //gestion du jeu
+  if (strcmp(topic,"game/start")==0 ){
+    game();
+    //? envoyer ack ?
+  }
+
+  if (strcmp(topic,"game/reset")==0){
+  reset();
+  //? envoyer ack ?
+  }
+
+  //TOPICS PROPRES AU JEU
+  //A Rajouter
 
 }
 
@@ -422,4 +419,10 @@ void loop() {
       lcd.print("Hello, World!");
       delay(1000);
       lcd.clear(); 
+
+        long now = millis();
+  if (now - lastMsg > 2000) {
+    lastMsg = now;
+    ++value;
+  }
   }
