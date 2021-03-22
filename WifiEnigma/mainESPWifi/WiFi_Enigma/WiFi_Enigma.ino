@@ -159,6 +159,7 @@ void retract(){
 void game()
 {
   Serial.println("Game has started");
+
  
       //
       lcd.setCursor(0,0);
@@ -183,8 +184,9 @@ void game()
         digitalWrite(32, LOW);
         digitalWrite(33, HIGH);
       }
-
+   
       buttonScanState=digitalRead(scanButton);
+      client.loop();
       if(buttonScanState == 1)
       {
          lcd.clear();
@@ -363,7 +365,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
       {
          client.subscribe("game/#");
          //rajouter la souscription aux topics propres au jeu
-         
+         client.subscribe("WifiEnigma/#");
         
          
       }
@@ -381,11 +383,21 @@ void callback(char* topic, byte* payload, unsigned int length) {
        game();
      }
 
+     
+
      else if (strcmp(topic,"game/reset")==0)
      {
        reset();
        //? envoyer ack ?
      }
+
+//Topic WifiEnigma
+      else if (strcmp(topic,"WifiEnigma/song")==0)
+     {
+       Serial.write(payload, length);
+       //? envoyer ack ?
+     }
+
 
 
   

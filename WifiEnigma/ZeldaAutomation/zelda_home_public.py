@@ -31,6 +31,8 @@ def noalsaerr():
 
 
 def musicalNoteDetection():
+    
+    
 
     #GPIO stuff
     GPIO.setmode(GPIO.BCM)
@@ -47,11 +49,16 @@ def musicalNoteDetection():
     GPIO.output(26, GPIO.LOW)
     #audio stuff maybe
     pygame.mixer.init(32000) #turn all of pygame on.
-    confirm = Sound("/home/pi/git_workspace/Puzzlebox/WifiEnigma/ZeldaAutomation/Music/OOT_Song_Correct.wav") #change accordingly for your song confirmation sound file name/location
+    confirm = Sound("Music/OOT_Song_Correct.wav") #change accordingly for your song confirmation sound file name/location
 
     #mqtt stuff
     client = mqtt.Client()
     client.connect("localhost",1883,300)
+    client.subscribe("WifiEnigma/#")
+    
+    client.loop_start()
+    
+    
 
     #Volume Sensitivity, 0.05: Extremely Sensitive, may give false alarms
     #             0.1: Probably Ideal volume
@@ -62,10 +69,11 @@ def musicalNoteDetection():
     BANDWIDTH = 25
 
     # Alarm frequencies (Hz) to detect (Use audacity to record a wave and then do Analyze->Plot Spectrum)
-    D4 = 590
-    E = 650
-    F = 700
-    G = 780
+    C = 494
+    D4 = 542
+    E = 618
+    F = 660
+    G = 744
     A = 882
     B = 992
     D5 = 1179
@@ -80,12 +88,14 @@ def musicalNoteDetection():
 
 
     #These numbers work for my ocarina in my house with a blue yeti, ymmv
-    minD4 = D4-50
-    maxD4 = D4+BANDWIDTH
-    minE = E-BANDWIDTH
-    maxE = E+BANDWIDTH
-    minF = F-40
-    maxF = F+BANDWIDTH
+    minC = C-25
+    maxC= C+25
+    minD4 = D4-25
+    maxD4 = D4+25
+    minE = E-25
+    maxE = E+25
+    minF = F-25
+    maxF = F+25
     minG = G-BANDWIDTH
     maxG = G+BANDWIDTH
     minA = A-BANDWIDTH
@@ -105,7 +115,7 @@ def musicalNoteDetection():
     epona = deque(['D5','B','A','D5','B','A'])
     zelda = deque(['E','G','D4','E','G','D4'])
     heal = deque(['B','A','F','B','A','F'])
-    test = deque(['D4','F','A','B','D5','D4']) #Not a Zelda song, just nice to make sure everything's working
+    test = deque(['C','D4','E','F','G','F']) #Not a Zelda song, just nice to make sure everything's working
     #heard note sequence deque
     notes = deque(['G','G','G','G','G','G'], maxlen=6)
 
@@ -141,8 +151,8 @@ def musicalNoteDetection():
         #print("Le tableau de audio est :\n", +audio_data)
         #print("Le tableau de normalized est :\n", +normalized_data)
         #print("La taille du tableau normalise est :", +normalized_data)
-        intensity = abs(fft.fft(normalized_data))[:int(NUM_SAMPLES/2)]
-        frequencies = linspace(0.0, float(SAMPLING_RATE)/2, num=NUM_SAMPLES/2)
+        intensity = abs(fft.fft(normalized_data))[:int(NUM_SAMPLES//2)]
+        frequencies = linspace(0.0, float(SAMPLING_RATE)//2, num=NUM_SAMPLES//2)
         if frequencyoutput:
            which = intensity[1:].argmax()+1
            # use quadratic interpolation around the max
@@ -155,7 +165,7 @@ def musicalNoteDetection():
            else:
               freqNow = which*SAMPLING_RATE/NUM_SAMPLES
            # print "\t\t\t\tfreq=",freqNow,"\t",freqPast
-        if minD4 <= freqPast <= maxD5 and abs(freqNow-freqPast) <= 25:
+        if minC <= freqPast <= maxD5 and abs(freqNow-freqPast) <= 25:
            if minA<=freqPast<=maxA and minA<=freqNow<=maxA and notes[-1]!='A':
               notes.append('A') #La note A (La) est ajoutée au tableau de note
               GPIO.output(26, GPIO.LOW) #LED éteinte
@@ -212,13 +222,22 @@ def musicalNoteDetection():
               GPIO.output(6, GPIO.LOW)
               GPIO.output(5, GPIO.LOW)
               print ("You played G!")
+              
+                     
+           elif minC<=freqPast<=maxC and minC<=freqNow<=maxC and notes[-1]!='C':
+              notes.append('C')
+              GPIO.output(26, GPIO.LOW)
+              GPIO.output(19, GPIO.HIGH)
+              GPIO.output(13, GPIO.LOW)
+              GPIO.output(6, GPIO.LOW)
+              GPIO.output(5, GPIO.LOW)
+              print ("You played C!")
            else:
               print ("What the heck is that?") #prints when sound is in range but not identifiable as note
 											#or when a note has already been registered and is "heard" again
 
         if notes==sun:
-           print ("\t\t\t\tSun song!")
-           client.publish("songID", "1") #1=Sun
+           print ("Sun song")
            confirm.play()
            notes.append('G') #append with 'G' to 'reset' notes, this keeps the song from triggering constantly
         if notes==forest:
@@ -227,7 +246,8 @@ def musicalNoteDetection():
            confirm.play()
            notes.append('G')
         if notes==test:
-           print ("Test Sequence Activated!")
+           print ("Musique de test reconnue !")
+           client.publish("WifiEnigma/song", "TestSong") #4=Forest 
            confirm.play()
            notes.append('G')
 
