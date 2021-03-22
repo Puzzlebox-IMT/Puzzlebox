@@ -2,6 +2,7 @@
 #include <PubSubClient.h>
 #include <Wire.h>  // This library is already built in to the Arduino IDE
 #include <LiquidCrystal_I2C.h> //This library you can add via Include Library > Manage Library > 
+#include <Stepper.h>
 #include "Keypad.h"
 
 //Paramètres Ecran
@@ -25,6 +26,11 @@ char keys[ROWS][COLS] = {
 byte rowPins[ROWS] = {2,0, 4, 16}; 
 byte colPins[COLS] = {17, 5, 18}; 
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
+
+
+//Paramètres StepperMotor
+const int stepsPerRevolution = 2048;
+Stepper myStepper = Stepper(stepsPerRevolution, 25,26, 27, 14);
 
 
 //Paramètres Wifi
@@ -59,8 +65,9 @@ int passwordSize = 4;
 //Variables for the whole game functionning
 char* face_id = "1-WiFi";
 int jeu_initialise = 1; //A MODIFIER EN '0' APRES LES TESTS
-bool attached_to_base = false;
+bool attached_to_base = true;
 bool enigma_solved = false;
+bool wifi_solved = false;
 
 
 void setup() {
@@ -69,8 +76,9 @@ void setup() {
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback); 
-
   
+
+  myStepper.setSpeed(10);
    //Initialiaze the secretKey and the encrypted message,
    //vérifie que l'opération XOR ne retourne pas de résultat contenant A,B,C,D,E,F (impossible de saisir ces caractères sur le pavé numérique)
   do{
@@ -81,6 +89,10 @@ void setup() {
 
   lcd.init();   // initializing the LCD
   lcd.backlight(); // Enable or Turn On the backlight 
+
+  //LEDS
+  pinMode(32, OUTPUT);
+  pinMode(33, OUTPUT);
 
 }
 
@@ -127,22 +139,55 @@ void setup_wifi() {
   Serial.println(WiFi.localIP());
 }
 
+void eject(){
+  myStepper.step(stepsPerRevolution);  
+  myStepper.step(stepsPerRevolution);    
+  myStepper.step(stepsPerRevolution); 
+  myStepper.step(stepsPerRevolution);  
+  myStepper.step(stepsPerRevolution);     
+}
+
+void retract(){
+  myStepper.step(-stepsPerRevolution);
+  myStepper.step(-stepsPerRevolution); 
+  myStepper.step(-stepsPerRevolution); 
+  myStepper.step(-stepsPerRevolution); 
+  myStepper.step(-stepsPerRevolution);
+}
+
 
 void game()
 {
   Serial.println("Game has started");
  
-
-
-
+      //
+      lcd.setCursor(0,0);
+      lcd.print("Debut du jeu !");
+   ;
+       //leds wifi
+      digitalWrite(32, HIGH);
+      digitalWrite(33, LOW);
+ 
       //Dérouler notice
+      eject();
+
+
       
       //If the player press the SCAN WIFI BUTTON  
       bool cond = false;
       do{
+      if(wifi_solved == false){
+        digitalWrite(32, HIGH);
+        digitalWrite(33, LOW);
+      }else{
+        digitalWrite(32, LOW);
+        digitalWrite(33, HIGH);
+      }
+
       buttonScanState=digitalRead(scanButton);
       if(buttonScanState == 1)
       {
+         lcd.clear();
          //Avoid to send a bunch of publish while pushing the button
          long now = millis();
          if (now - watchdogScanButton > 2000) 
@@ -224,14 +269,18 @@ void game()
           Serial.println("Mot de passe résolu !");
           lcd.setCursor(0,1);
           lcd.print("MDP correct !");
+          wifi_solved = true;
           delay(2000);
           lcd.clear();
           delay(1000);
           lcd.clear();
-            //éteindre led wifi rouge
-            //allumer led wifi verte
+          
+          
+
       }
       delay(100);
+      
+      //LEDS
       //fin partie 1, activer jauge 1
 
 
@@ -293,7 +342,8 @@ void reset(){
   }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.println();
+  Serial.println("Message MQTT reçu : ");
+  Serial.println(topic);
   //Gestion des messages MQTT
   //si le raspberry souhaite savoir si la face est connecté sur la base
   if (strcmp(topic,"connection/ask_state")==0)
@@ -303,6 +353,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     payload += ",\"state\":";
     payload += attached_to_base;
     payload += "}";
+
     
     if (client.publish("connection/state", (char*) payload.c_str())) 
     {
@@ -312,29 +363,32 @@ void callback(char* topic, byte* payload, unsigned int length) {
       {
          client.subscribe("game/#");
          //rajouter la souscription aux topics propres au jeu
-         //gestion du jeu
-         if(strcmp(topic,"game/start")==0 )
-         {
-           game();
-           //? envoyer ack ?
-         }
-
-         else if (strcmp(topic,"game/reset")==0)
-         {
-           reset();
-           //? envoyer ack ?
-         }
+         
+        
          
       }
 
-    
     }
+        
     else 
     {
       Serial.println("Publish connection/state failed");
     }
-
   }
+     //gestion du jeu
+    else if(strcmp(topic,"game/start")==0 )
+     {
+       game();
+     }
+
+     else if (strcmp(topic,"game/reset")==0)
+     {
+       reset();
+       //? envoyer ack ?
+     }
+
+
+  
 
 }
 
@@ -375,11 +429,11 @@ void loop() {
     ++value;
   }
   
-  if(jeu_initialise == 1)
-  {
-    game();
-  }
-     
+//  if(jeu_initialise == 1)
+//  {
+//    game();
+//  }
+//     
 
   
 
