@@ -56,9 +56,18 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
 
             bluetoothStatus = findViewById(R.id.bluetoothStatus);
-
             displayPairedDevices = findViewById(R.id.displayPairedDevices);
-            displayPairedDevices.setEnabled(false);
+
+            if (!bluetoothAdapter.isEnabled()) {
+                bluetoothStatus.setText("Le bluetooth n'est pas activé");
+                displayPairedDevices.setEnabled(false);
+                Intent enableBluetoothIntent= new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBluetoothIntent, REQUEST_CODE_ENABLE_BLUETOOTH);
+            } else {
+                bluetoothStatus.setText("Le bluetooth est activé");
+                displayPairedDevices.setEnabled(true);
+            }
+
             displayPairedDevices.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -73,11 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
             deviceList = findViewById(R.id.deviceList);
 
-            if (!bluetoothAdapter.isEnabled()) {
-                bluetoothStatus.setText("Le bluetooth n'est pas activé");
-                Intent enableBluetoothIntent= new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBluetoothIntent, REQUEST_CODE_ENABLE_BLUETOOTH);
-            }
+
 
         }
     }

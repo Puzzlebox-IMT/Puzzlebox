@@ -9,18 +9,90 @@
     tools:context=".LedControl">
 
     <Button
-        android:id="@+id/btn0"
+        android:id="@+id/morseCodeFolder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="OFF"/>
+        android:backgroundTint="@color/purple_500"
+        android:drawableLeft="@drawable/ic_baseline_folder_24"
+        android:text="Data encryptions"/>
+
+    <LinearLayout
+        android:id="@+id/morseCodeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/morseCodeLetters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="@color/purple_500"
+            android:drawableLeft="@drawable/ic_baseline_folder_24"
+            android:text="Letters"/>
+
+        <Button
+            android:id="@+id/morseCodeNumbers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="@color/purple_500"
+            android:drawableLeft="@drawable/ic_baseline_folder_24"
+            android:text="Numbers"/>
+
+        <Button
+            android:id="@+id/morseCodeSpecial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="@color/purple_500"
+            android:drawableLeft="@drawable/ic_baseline_folder_24"
+            android:text="Special Features"/>
+
+    </LinearLayout>
 
     <Button
-        android:id="@+id/btn1"
+        android:id="@+id/coreFolder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="ON"/>
+        android:backgroundTint="@color/white"
+        android:drawableLeft="@drawable/ic_baseline_lock_24"
+        android:text="Access to core elements"
+        android:textColor="@color/black"/>
+
+    <Button
+        android:id="@+id/openHatch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:backgroundTint="@color/purple_500"
+        android:drawableLeft="@drawable/ic_baseline_text_snippet_24"
+        android:text="Opening the hatch"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/adminFolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/black"
+        android:drawableLeft="@drawable/ic_baseline_lock_24"
+        android:text="Administrator Access"/>
+
+    <Button
+        android:id="@+id/interruptProgram"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:backgroundTint="@color/purple_500"
+        android:drawableLeft="@drawable/ic_baseline_text_snippet_24"
+        android:text="Interrupt Program Launch"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnDisconnect"
